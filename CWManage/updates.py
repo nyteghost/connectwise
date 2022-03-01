@@ -12,7 +12,20 @@ import pandas as pd
 
 config = tangerine()
 
+config = tangerine()
+AUTH=config['cwAUTH']
+cwDocumentHeaders = config['cwDocumentHeaders']
+tokenHeader = config['cwaHeader']
+URL = 'https://api-na.myconnectwise.net/v2021_3/apis/3.0/'
+cwAURL = 'https://sca-atl.hostedrmm.com/cwa/api/v1/'
 
+conn = pyodbc.connect(
+'Driver={ODBC Driver 17 for SQL Server};'
+'Server='+(config['database']['Server'])+';'
+'Database=Shipping;'
+'UID='+(config['database']['UID'])+';'
+'PWD='+(config['database']['PWD'])+';'
+)
 
 """
 This script is used to update Students ConnectWise Manage email according to what their email is set to in the Database. 
@@ -27,7 +40,7 @@ def allEmailUpdate(): ## Selects students from tbStudent
     return studentEmailDict
 
 def getContactInfo(CONTACT,pAI): ## Finds Information by STID ##
-    ci = contacts_api.ContactsAPI(url=cw.cwURL, auth=cw.cwAUTH)
+    ci = contacts_api.ContactsAPI(url=URL, auth=AUTH)
     ci.conditions = 'company/identifier="Georgia Cyber Academy"'
     if isinstance(CONTACT, int):
         print(CONTACT,"is int.")

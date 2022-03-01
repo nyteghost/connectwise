@@ -4,13 +4,17 @@ parentdir = os.path.dirname(currentdir)
 sys.path.append(parentdir)
 from connectpyse.time import time_entries_api,time_entry
 from connectpyse.service import ticket_notes_api, ticket_note,ticket,tickets_api
-from cus_lib.cwConfig import *
-
+from doorKey import tangerine
 from datetime import date,timedelta
 import requests
 
-URL = cwTEURL
-AUTH = cwAUTH
+config = tangerine()
+
+AUTH=config['cwAUTH']
+cwDocumentHeaders = config['cwDocumentHeaders']
+tokenHeader = config['cwaHeader']
+URL = 'https://api-na.myconnectwise.net/v2021_3/apis/3.0/'
+cwAURL = 'https://sca-atl.hostedrmm.com/cwa/api/v1/'
 HEADERS = config['cwHeader4TicketEntry']
 
 today = date.today()
@@ -31,7 +35,7 @@ def getTimeEntries(today=today):
     timeUser = input("Enter User Name: ")
     print("Username: "+timeUser)
     aH_list = []
-    gte = time_entries_api.TimeEntriesAPI(url=cwURL, auth=cwAUTH)
+    gte = time_entries_api.TimeEntriesAPI(url=URL, auth=AUTH)
     gte.conditions = 'member/identifier="'+timeUser+'"AND timeSheet/name="{bow} to {eow}"'.format(bow=start,eow=end)
     # gte.childconditions = 'timeStart contains [2022-01-06]'
     gte.orderBy = 'timeStart = asc'
@@ -63,7 +67,7 @@ getTimeEntries()
 
 def createTimeTicket(TICKET_ID):
     deductTime,timeUser = getTimeEntries()
-    ticket_notes = ticket_notes_api.TicketNotesAPI(url=cwURL, auth=cwAUTH, ticket_id=TICKET_ID)
+    ticket_notes = ticket_notes_api.TicketNotesAPI(url=URL, auth=AUTH, ticket_id=TICKET_ID)
     timeEntry = input("Time Entry Notes: ")
     note = ticket_note.TicketNote({"text":"Deduct Time: {deductTime}\n{timeEntry}".format(deductTime=deductTime,timeEntry=timeEntry), "detailDescriptionFlag": True})
     ticket_notes.create_ticket_note(note)
@@ -74,7 +78,7 @@ def createTimeTicket(TICKET_ID):
 
 def newTimeEntry(thisTime=thisTime,thatTime=thatTime):
     ddT,timeUser = getTimeEntries()
-    api_request = cwURL+'time/entries/'
+    api_request = URL+'time/entries/'
     time_entry = {
             "chargeToId": 323574,
             "chargeToType": "ServiceTicket",
@@ -101,7 +105,7 @@ def newTimeEntry(thisTime=thisTime,thatTime=thatTime):
 
 """ConnectPyse Method"""
 def createTimeEntryCP():
-    time_Entry = time_entries_api.TimeEntriesAPI(url=cwURL, auth=config['cwHeaders'],)
+    time_Entry = time_entries_api.TimeEntriesAPI(url=URL, auth=config['cwHeaders'],)
     note = time_entry.TimeEntry({
             'chargeToId': 323574 ,
             'chargeToType': 'ServiceTicket',
@@ -114,7 +118,7 @@ def createTimeEntryCP():
 
 
 def getTime(employee):
-    gt = time_entries_api.TimeEntriesAPI(url=cwURL, auth=cwAUTH)
+    gt = time_entries_api.TimeEntriesAPI(url=URL, auth=AUTH)
     gt.conditions = 'member/identifier contains "{}"AND chargeToId=326343'.format(employee)
     gt.pageSize = 1
     gt = gt.get_time_entries()

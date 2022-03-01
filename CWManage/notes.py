@@ -43,30 +43,3 @@ def getTimeEntriesByTicketID(ticketID):
         engtimeEND = i.timeEnd
         engineer = i.member['identifier']
     return(engtimeEND,engineer)
-
-
-list_k =[]
-
-def timeComparision(tID):
-    parentUPDATE,parentCONTACT,dateCreated = getTicketNotes(tID)
-    engtimeEND,engineer = getTimeEntriesByTicketID(tID)
-    parentUPDATE = parser.parse(parentUPDATE)
-    dateCreated = parser.parse(dateCreated)
-    engtimeEND = parser.parse(engtimeEND)
-    today = datetime.now(tz=pytz.UTC).replace(microsecond=0)
-    x = today - engtimeEND
-    print(tID)
-
-    if parentUPDATE > engtimeEND:
-        print(parentCONTACT,parentUPDATE)
-        return(parentCONTACT,parentUPDATE)
-    elif parentUPDATE < engtimeEND:
-        print(engineer,'-',engtimeEND,x)
-        print(engtimeEND)
-        print(parentUPDATE)
-        if x.days > 5:
-            print('Yes')
-        return(x,engineer+' - '+str(x))
-
-
-timeComparision(324413  )

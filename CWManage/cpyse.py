@@ -181,8 +181,7 @@ def getRequestTicket(): ## Used for Address-ReturnCheck script to find Tickets f
     print(df)
     return df
 
-if __name__ == "__main__":
-    getTicketNotes(326343)
+
 
 def getReOpenedTickets(): ## Used for Address-ReturnCheck script to find Tickets for GCA with Scheduled as identifier
     gt = tickets_api.TicketsAPI(url=URL, auth=AUTH)
@@ -345,5 +344,5 @@ def getGCAFBARTickets(): ## Used for Address-ReturnCheck script to find Tickets 
 
 
 
-# if __name__ == "__main__":
-#     getTicketNotes(324656)
+if __name__ == "__main__":
+    getTicketNotes(326343)
