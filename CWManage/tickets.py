@@ -136,8 +136,7 @@ def getTicketByID(ticketID): ## Used for Address-ReturnCheck script to find Tick
     print('Assigned Team Name:',gt.team['name'])
     print('Status ID: ',gt.status['id'])
 
-if __name__ == "__main__":
-    getTicketByID(324161)
+
 
 def getERLTickets(): ## Used for Address-ReturnCheck script to find Tickets for GCA with Scheduled as identifier
     gt = tickets_api.TicketsAPI(url=URL, auth=AUTH)
@@ -218,7 +217,8 @@ def testGetNotes():
 
      
 
-
+if __name__ == "__main__":
+    getTicketByID(350699)
 
 
 # if __name__ == "__main__":
