@@ -3,7 +3,6 @@ import requests
 import json
 import time
 import getpass
-import pickle
 from datetime import datetime
 import pandas as pd
 import getpass
@@ -25,9 +24,6 @@ def getToken():
     mydict = response.json()
     accessToken = mydict.get('AccessToken')
     data = [accessToken]
-    file = open('token', 'wb')
-    pickle.dump(data, file)
-    file.close()
     print('Token Generated.')
     if response.status_code != 200:
         print(api_request)
