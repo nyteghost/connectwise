@@ -13,7 +13,7 @@ config = tangerine()
 AUTH=config['cwAUTH']
 cwDocumentHeaders = config['cwDocumentHeaders']
 tokenHeader = config['cwaHeader']
-URL = 'https://api-na.myconnectwise.net/v2021_3/apis/3.0/'
+URL = 'https://api-na.myconnectwise.net/v2022_1/apis/3.0/'
 cwAURL = 'https://sca-atl.hostedrmm.com/cwa/api/v1/'
 HEADERS = config['cwHeader4TicketEntry']
 
@@ -31,19 +31,19 @@ end = start + timedelta(days=6)
 # start = "["+str(start)+"]"
 # print(start)
 
-def getTimeEntries(today=today):
+def getTimeEntries():
     timeUser = input("Enter User Name: ")
     print("Username: "+timeUser)
     aH_list = []
     gte = time_entries_api.TimeEntriesAPI(url=URL, auth=AUTH)
-    gte.conditions = 'member/identifier="'+timeUser+'"AND timeSheet/name="{bow} to {eow}"'.format(bow=start,eow=end)
+    gte.conditions = 'member/identifier="'+timeUser+'" AND timeSheet/name="{bow} to {eow}"'.format(bow=start,eow=end)
     # gte.childconditions = 'timeStart contains [2022-01-06]'
     gte.orderBy = 'timeStart = asc'
     gte.pageSize = 10
     gte = gte.get_time_entries()
     ls = list(gte)
+    print
     for i in ls:
-        print(i)
         if str(today) in i.timeStart:
             print("Ticket Number: ",i.id)
             print("Company :",i.company['name'])
@@ -63,7 +63,7 @@ def getTimeEntries(today=today):
     print("actual Hours: ",tAH)
     print("actual Hours with Lunch added: ",deductTime)
     return deductTime,timeUser
-getTimeEntries()
+
 
 def createTimeTicket(TICKET_ID):
     deductTime,timeUser = getTimeEntries()
@@ -73,16 +73,12 @@ def createTimeTicket(TICKET_ID):
     ticket_notes.create_ticket_note(note)
 
 
-
-
-
-def newTimeEntry(thisTime=thisTime,thatTime=thatTime):
+def newTimeEntry():
     ddT,timeUser = getTimeEntries()
     api_request = URL+'time/entries/'
     time_entry = {
-            "chargeToId": 323574,
-            "chargeToType": "ServiceTicket",
-            # Enter your CW Username  
+            "chargeToId": 358157,
+            "chargeToType": "ServiceTicket", 
             "member": {"identifier": timeUser},
             "workType": {"name": "Remote"},
             "timeStart": thisTime,
@@ -91,7 +87,7 @@ def newTimeEntry(thisTime=thisTime,thatTime=thatTime):
             "billableOption": "Billable",
             "notes": "- Morning Process - Refresh\(\) python optimization - Logging optimization"
         }
-    response = requests.post(url=api_request, headers=config['cwHeaders'], json=time_entry)
+    response = requests.post(url=api_request,  headers=config['cwHeaders'], json=time_entry)
     statuscode = response.status_code
 
     if statuscode != 200:
@@ -101,18 +97,22 @@ def newTimeEntry(thisTime=thisTime,thatTime=thatTime):
         pass  
     return response
 
-# newTimeEntry()
+
 
 """ConnectPyse Method"""
 def createTimeEntryCP():
-    time_Entry = time_entries_api.TimeEntriesAPI(url=URL, auth=config['cwHeaders'],)
+    ddT,timeUser = getTimeEntries()
+    time_Entry = time_entries_api.TimeEntriesAPI(url=URL, auth=config['cwHeaders'])
     note = time_entry.TimeEntry({
-            'chargeToId': 323574 ,
-            'chargeToType': 'ServiceTicket',
-            'member': {"identifier": "MBrown"},
-            'workType': {"name": "Remote"},
-            'timeStart': '2022-01-17T12:00:00Z',
-            'timeEnd':'2022-01-17T21:00:00Z'
+            "chargeToId": 358157,
+            "chargeToType": "ServiceTicket", 
+            "member": {"identifier": timeUser},
+            "workType": {"name": "Remote"},
+            "timeStart": thisTime,
+            "timeEnd": thatTime,
+            "hoursDeduct": ddT,
+            "billableOption": "Billable",
+            "notes": "- Morning Process - Refresh\(\) python optimization - Logging optimization"
         })
     time_Entry.create_time_entry(note)
 
@@ -124,3 +124,5 @@ def getTime(employee):
     gt = gt.get_time_entries()
     ls = list(gt)
     print(ls)
+    
+createTimeEntryCP()

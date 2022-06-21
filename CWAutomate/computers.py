@@ -2,14 +2,14 @@ import sys, os
 currentdir = os.path.dirname(os.path.realpath(__file__))
 parentdir = os.path.dirname(currentdir)
 sys.path.append(parentdir)
-from token import getToken,refreshToken
+from cwToken import getToken,refreshToken
+from fbar_util import fbar_cleanUp,my_dictionary,cwURL,getToken,getSpecificComputer
 import requests
 import json
 import xml.etree.ElementTree as ET
 import time
-from doorKey import tangerine
+from doorKey import config
 import cwToken as cw
-config = tangerine()
 cwAUTH=config['cwAUTH']
 cwDocumentHeaders = config['cwDocumentHeaders']
 tokenHeader = config['cwaHeader']

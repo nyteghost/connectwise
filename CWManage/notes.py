@@ -23,14 +23,16 @@ def getTicketNotes(TICKET_ID):
     ticket_notes.orderBy = 'id desc'
     ticket_notes = ticket_notes.get_ticket_notes()
     ls = list(ticket_notes)
-    x=0
-    for i in ls:
-        # x += 1
-        # print("\n","Note #",x,"\n[",i,"]")
-        parentUPDATE = i._info['lastUpdated']
-        parentCONTACT = i._info['updatedBy']
-        dateCreated = i.dateCreated
-    return(parentUPDATE,parentCONTACT,dateCreated)
+    print(ls)
+    # x=0
+    # for i in ls:
+    #     print(i)
+    #     # x += 1
+    #     # print("\n","Note #",x,"\n[",i,"]")
+    #     parentUPDATE = i._info['lastUpdated']
+    #     parentCONTACT = i._info['updatedBy']
+    #     dateCreated = i.dateCreated
+    # return(parentUPDATE,parentCONTACT,dateCreated)
 
 def getTimeEntriesByTicketID(ticketID):
     gte = time_entries_api.TimeEntriesAPI(url=URL, auth=cwAURL)
@@ -43,3 +45,6 @@ def getTimeEntriesByTicketID(ticketID):
         engtimeEND = i.timeEnd
         engineer = i.member['identifier']
     return(engtimeEND,engineer)
+
+print(getTimeEntriesByTicketID(326855))
+

@@ -1,4 +1,5 @@
 import sys, os
+import os.path
 currentdir = os.path.dirname(os.path.realpath(__file__))
 parentdir = os.path.dirname(currentdir)
 sys.path.append(parentdir)
@@ -65,18 +66,21 @@ def getAPIRequest():
     print(response.status_code,response.text)
 
 def getcwaHEADER():
-        file = open('token', 'rb')
-        data = pickle.load(file)
-        file.close()
-        for i in data:
-               i
-        token = "Bearer "+ i
-        cwaGetHeader = {
-                "Authorization":token,
-                'clientId':config['cwaHeader']['clientID'],
-                "Content-Type":"application/json"
-                }
-        return(cwaGetHeader)
+    file_exists = os.path.exists('token')
+    if not file_exists:
+        getToken()
+    file = open('token', 'rb')
+    data = pickle.load(file)
+    file.close()
+    for i in data:
+            i
+    token = "Bearer "+ i
+    cwaGetHeader = {
+            "Authorization":token,
+            'clientId':config['cwaHeader']['clientID'],
+            "Content-Type":"application/json"
+            }
+    return(cwaGetHeader)
 
 def cwlogin(mfa):
     cwAloginCreds = {

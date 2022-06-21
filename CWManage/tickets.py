@@ -17,7 +17,7 @@ config = tangerine()
 AUTH=config['cwAUTH']
 cwDocumentHeaders = config['cwDocumentHeaders']
 tokenHeader = config['cwaHeader']
-URL = 'https://api-na.myconnectwise.net/v2021_3/apis/3.0/'
+URL = 'https://api-na.myconnectwise.net/v2022_1/apis/3.0/'
 cwAURL = 'https://sca-atl.hostedrmm.com/cwa/api/v1/'
 
 class my_dictionary(dict): 
@@ -63,7 +63,6 @@ def ticketRequestForShipping(): ## Used for Address-ReturnCheck script to find T
 
 
 def ticketRequestForShippingDF(): ## Used for Address-ReturnCheck script to find Tickets for GCA with Scheduled as identifier
-   
     df = pd.DataFrame(columns=["Ticket #","Contact","Status","Creation Date"]) #Create DataFrame
     columns=list(df) #Get column names
     data=[] #Empty List used for dataframe
@@ -135,7 +134,7 @@ def getTicketByID(ticketID): ## Used for Address-ReturnCheck script to find Tick
     print('Assigned Team ID:',gt.team['id'])
     print('Assigned Team Name:',gt.team['name'])
     print('Status ID: ',gt.status['id'])
-
+    print('Customer Updated',gt.customerUpdatedFlag)
 
 
 def getERLTickets(): ## Used for Address-ReturnCheck script to find Tickets for GCA with Scheduled as identifier
@@ -171,8 +170,7 @@ def getERLTickets(): ## Used for Address-ReturnCheck script to find Tickets for 
         pass 
     return ticketID
  
-def testGetNotes():
-    ticketID=getERLTickets()
+def testGetNotes(ticketID):
     df = pd.DataFrame(columns=['Contact','Equipment Being Returned'])
     tn = ticket_notes_api.TicketNotesAPI(url=URL, auth=AUTH,ticket_id=ticketID)
     tn = tn.get_ticket_notes()
@@ -181,48 +179,66 @@ def testGetNotes():
     # index=0
     sliced_list=[]
     for i in tnlist:
-        # print(i)
-        text = i.text
-        ticketID = i.ticketId
-        text_sliced = text.splitlines()
-        for i,j in enumerate(text_sliced):
-            if 'Laptop' in j:
-                device = 'Laptop'
-                x = text_sliced[i]
-                sliced_list.append(x)
-    # print(sliced_list)
-    stid_list = []
-    for i in sliced_list:
-        x = re.findall('\(.*?\)',i)
-        # print(x)
-        stid_list.append(x)
-    # print(stid_list)
+        print(i)
+        # text = i.text
+    #     ticketID = i.ticketId
+    #     text_sliced = text.splitlines()
+    #     for i,j in enumerate(text_sliced):
+    #         if 'Laptop' in j:
+    #             device = 'Laptop'
+    #             x = text_sliced[i]
+    #             sliced_list.append(x)
+    # # print(sliced_list)
+    # stid_list = []
+    # for i in sliced_list:
+    #     x = re.findall('\(.*?\)',i)
+    #     # print(x)
+    #     stid_list.append(x)
+    # # print(stid_list)
     
-    final_stid_list = []
-    for i in stid_list:
-        for i in i:
-            stid = re.sub("[^0-9]", "",i)
-            # print(stid)
-            final_stid_list.append(stid)
-    # final_stid_list= ", ".join(final_stid_list)
-    print("Ticket # is: ",ticketID)
-    # print("Device type is: "+device)
-    print("The students needing ERLs are :{}".format(final_stid_list))
+    # final_stid_list = []
+    # for i in stid_list:
+    #     for i in i:
+    #         stid = re.sub("[^0-9]", "",i)
+    #         # print(stid)
+    #         final_stid_list.append(stid)
+    # # final_stid_list= ", ".join(final_stid_list)
+    # print("Ticket # is: ",ticketID)
+    # # print("Device type is: "+device)
+    # print("The students needing ERLs are :{}".format(final_stid_list))
     
-    # df = pd.DataFrame(columns=["Contact","Equipment Being Returned","Reason For Return","Label for Returns"])
-    print(final_stid_list)
+    # # df = pd.DataFrame(columns=["Contact","Equipment Being Returned","Reason For Return","Label for Returns"])
+    # print(final_stid_list)
     
-    # print(df)
-    return(x,final_stid_list)
+    # # print(df)
+    # return(x,final_stid_list)
 
-     
+
+def testForVeritick(ticketID): ## Used for Address-ReturnCheck script to find Tickets for GCA with Scheduled as identifier
+    gt = tickets_api.TicketsAPI(url=URL, auth=AUTH)
+    gt.pageSize = 1000
+    gt.orderBy = '_info/dateEntered'
+    gt = gt.get_ticket_by_id(ticketID)
+    ticket_contact = gt.contact['name']
+    print("Ticket contact:",ticket_contact)
+    if True in [char.isdigit() for char in ticket_contact]:
+        STID = re.sub("\D","",ticket_contact)
+        print(STID)
+    else:
+        contact_email = gt.contactEmailAddress
+        if "@georgiacyber.org" in contact_email and contact_email != "gcaequipment@georgiacyber.org":
+            print('Contact Email:',contact_email)
+            STID = contact_email.replace('@georgiacyber.org',"")
+            print('Staff Username:',STID)
+            return STID,ticketID
+    
 
 if __name__ == "__main__":
-    getTicketByID(350699)
+    testGetNotes(360924 )
 
 
 # if __name__ == "__main__":
-   # getTicketByID(326024)
+   # getTicketByID(354513)
 #    getTickets()
     #getTickets()
     # getTicketNotes()
