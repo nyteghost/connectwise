@@ -16,6 +16,13 @@ tokenHeader = config['cwaHeader']
 cwURL = config['cwAPI']['web']
 cwAURL = 'https://sca-atl.hostedrmm.com/cwa/api/v1/'
 
+# File Information
+localuser = getpass.getuser()
+prefix = fr'C:\Users\{localuser}'
+excelFolder = r'\Southeastern Computer Associates, LLC\GCA Deployment - Documents\Database\Automate Audit Win10L Returns'
+comboBreaker = prefix + excelFolder
+my_Date = time.strftime("%Y%m%d")
+
 
 def getToken():
     loginCRED = cwlogin()
@@ -31,6 +38,16 @@ def getToken():
         print(response.text)
         pass
     return accessToken
+
+
+def getcwaHEADER(Token):
+    token = "Bearer " + Token
+    GetHeader = {
+        "Authorization": token,
+        'clientId': config['cwaHeader']['clientID'],
+        "Content-Type": "application/json"
+    }
+    return GetHeader
 
 
 def getSpecificComputer(computerName, Token):
@@ -63,16 +80,6 @@ def getSpecificComputer(computerName, Token):
         print(status)
         print(lastUser)
         return compId, serialNumber
-
-
-def getcwaHEADER(Token):
-    token = "Bearer " + Token
-    GetHeader = {
-        "Authorization": token,
-        'clientId': config['cwaHeader']['clientID'],
-        "Content-Type": "application/json"
-    }
-    return GetHeader
 
 
 def retireThatPC(compId, Token):
@@ -137,13 +144,6 @@ def colorThoseRows(file, listing):
 
     wb.save(file)
     wb.close()
-
-
-localuser = getpass.getuser()
-prefix = fr'C:\Users\{localuser}'
-excelFolder = r'\Southeastern Computer Associates, LLC\GCA Deployment - Documents\Database\Automate Audit Win10L Returns'
-comboBreaker = prefix + excelFolder
-my_Date = time.strftime("%Y%m%d")
 
 
 def main():
