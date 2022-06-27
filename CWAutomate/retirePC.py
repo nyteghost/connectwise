@@ -10,6 +10,18 @@ import glob
 import openpyxl
 from openpyxl import Workbook, load_workbook
 from openpyxl.styles import PatternFill
+from requests.adapters import HTTPAdapter, Retry
+
+retry_strategy = Retry(
+    total=10,
+    status_forcelist=[429, 500, 502, 503, 504],
+    method_whitelist=["HEAD", "GET", "OPTIONS"]
+)
+adapter = HTTPAdapter(max_retries=retry_strategy)
+http = requests.Session()
+http.mount("https://", adapter)
+http.mount("http://", adapter)
+
 
 # Config
 tokenHeader = config['cwaHeader']
@@ -53,7 +65,7 @@ def getcwaHEADER(Token):
 def getSpecificComputer(computerName, Token):
     getHeader = getcwaHEADER(Token)
     api_request = cwAURL + '/' + 'Computers?condition=ComputerName = "GCA-{computer}"'.format(computer=computerName)
-    response = requests.get(url=api_request, headers=getHeader)
+    response = http.get(url=api_request, headers=getHeader)
     rt = response.text
     try:
         res = json.loads(rt)
@@ -118,13 +130,13 @@ def runIt(dictionary):
             print(f"{assetID} {serialNum} not found in Automate.")
             not_found.append(assetID)
         else:
-            if serialNum in serialNumber:
+            if serialNum.strip().lower() == serialNumber.strip().lower():
                 time.sleep(2)
                 retireThatPC(computerId, authToken)
                 complete.append(assetID)
                 time.sleep(2)
             else:
-                print(f"For asset {assetID}, excel SN:{serialNum} does not match automate:{serialNumber}")
+                print(f"For asset {assetID}, excel SN: {serialNum} does not match automate: {serialNumber}")
                 not_complete.append(assetID)
                 time.sleep(2)
     return complete, not_complete, not_found
@@ -137,7 +149,6 @@ def colorThoseRows(file, listing):
     fill_gen = PatternFill(start_color='92D050', end_color='92D050', fill_type="solid")
 
     for row in ws.iter_rows():
-        print(row)
         if row[0].value in listing:
             for i in range(5):
                 row[i].fill = fill_gen
