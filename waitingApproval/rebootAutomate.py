@@ -110,13 +110,18 @@ def getSpecificComputer(computerName, Token):
         getToken()
         time.sleep(5)
         res = json.loads(rt)
-    print(res)
     for i in res:
+        print(i)
         compId = i['Id']
         computerName = i['ComputerName']
+        compType = i['Type']
+        compOS = i['OperatingSystemName']
         print(computerName)
         print(compId)
-        compIDList.append(compId)
+        print(compType)
+        print(compOS)
+        if compType == 'Workstation' and 'Server' not in compOS:
+            compIDList.append(compId)
     return compIDList
 
 
@@ -190,12 +195,15 @@ def runIt():
             for comp in compList:
                 getSpecificComputer(comp, authToken)
         print(compIDList)
-        runScript(compIDList, authToken, "272")
-        for ct in tl:
-            completeTicket(ct)
+        if compIDList:
+            runScript(compIDList, authToken, "272")
+            for ct in tl:
+                completeTicket(ct)
     else:
         pass
 
 
-runIt()
-
+# runIt()
+authToken = getToken()
+x = getSpecificComputer('GCA-BACKUP01', authToken)
+print(x)
