@@ -94,7 +94,7 @@ def ticketRequestForShippingDF(): ## Used for Address-ReturnCheck script to find
 
 def getTickets(): ## Used for Address-ReturnCheck script to find Tickets for GCA with Scheduled as identifier
     gt = tickets_api.TicketsAPI(url=URL, auth=AUTH)
-    gt.conditions = 'company/identifier="Georgia Cyber Academy" AND status/name contains "Work Completed"'
+    gt.conditions = 'status/name contains "Work Completed By Help Desk"'
     print(gt.conditions)
     gt.pageSize = 1000
     gt.orderBy = '_info/dateEntered'
@@ -234,7 +234,7 @@ def testForVeritick(ticketID): ## Used for Address-ReturnCheck script to find Ti
     
 
 if __name__ == "__main__":
-    testGetNotes(360924 )
+    getTicketByID(371435)
 
 
 # if __name__ == "__main__":
