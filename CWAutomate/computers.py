@@ -14,7 +14,7 @@ cwAUTH=config['cwAUTH']
 cwDocumentHeaders = config['cwDocumentHeaders']
 tokenHeader = config['cwaHeader']
 cwURL = 'https://api-na.myconnectwise.net/v2021_3/apis/3.0/'
-cwAURL = 'https://sca-atl.hostedrmm.com/cwa/api/v1/'
+cwAURL = 'https://<company>.hostedrmm.com/cwa/api/v1/'
 
 class my_dictionary(dict): 
     # __init__ function 
@@ -104,7 +104,7 @@ def getGCAWin11Computers():
     rt = response.text
     res = json.loads(rt)
     for i in res:
-        if i['Client']['Name'] == "Georgia Cyber Academy":
+        if i['Client']['Name'] == "Some School":
             print("The Client is: ",i['Client']['Name'])
             print("The Computer Name is: ",i['ComputerName'])
             print("The Serial Number is: ",i['SerialNumber'])
