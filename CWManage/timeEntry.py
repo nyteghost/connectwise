@@ -13,7 +13,7 @@ AUTH = config['cwAUTH']
 cwDocumentHeaders = config['cwDocumentHeaders']
 tokenHeader = config['cwaHeader']
 URL = 'https://api-na.myconnectwise.net/v2022_1/apis/3.0/'
-cwAURL = 'https://sca-atl.hostedrmm.com/cwa/api/v1/'
+cwAURL = 'https://<company>.hostedrmm.com/cwa/api/v1/'
 HEADERS = config['cwHeader4TicketEntry']
 
 today = date.today()
