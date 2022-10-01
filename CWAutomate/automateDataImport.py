@@ -19,7 +19,7 @@ config = fs.tangerine()
 #Local data location
 prefix = r"C:\Users"
 localuser = getpass.getuser()
-suffix = r"\Southeastern Computer Associates, LLC\GCA Deployment - Documents\Database\Daily Data Sets\CURRENT GCA AUTOMATE Data.xlsx"
+suffix = r""
 excel_relative_file_path = prefix + "\\"+ localuser + suffix
 
 
@@ -32,7 +32,7 @@ excel_relative_file_path = prefix + "\\"+ localuser + suffix
 conn = pyodbc.connect(
     'Driver={ODBC Driver 17 for SQL Server};'
     'Server='+(config['database']['Server'])+';'
-    'Database=GCAAssetMGMT;'
+    'Database=SomeSchoolAssetMGMT;'
     'UID='+(config['database']['UID'])+';'
     'PWD='+(config['database']['PWD'])+';'
 )
@@ -52,7 +52,7 @@ for i in range (0,100):
 
 
 
-###############  GCA-Automate Data File Sheet1  #############
+###############  SomeSchool-Automate Data File Sheet1  #############
 
 column_mapping = {
     'ComputerID':'ComputerID',
