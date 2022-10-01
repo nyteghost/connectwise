@@ -11,7 +11,7 @@ AUTH=config['cwAUTH']
 cwDocumentHeaders = config['cwDocumentHeaders']
 tokenHeader = config['cwaHeader']
 URL = 'https://api-na.myconnectwise.net/v2021_3/apis/3.0/'
-cwAURL = 'https://sca-atl.hostedrmm.com/cwa/api/v1/'
+cwAURL = 'https://<company>.hostedrmm.com/cwa/api/v1/'
 
 
 # def createTicketNote(TICKET_ID):
@@ -21,11 +21,11 @@ cwAURL = 'https://sca-atl.hostedrmm.com/cwa/api/v1/'
 
 def assignToTicket(ticketID):
     assign_ticket = schedule_entries_api.ScheduleEntriesAPI(url=URL, auth=cwAURL)
-    assigned = schedule_entry.ScheduleEntry({"objectId": ticketID, "member":{"identifier":"NBowman"},"type": { "identifier": "S" }})
+    assigned = schedule_entry.ScheduleEntry({"objectId": ticketID, "member":{"identifier":"SPerson"},"type": { "identifier": "S" }})
     assign_ticket.create_schedule_entry(assigned)
-    assigned = schedule_entry.ScheduleEntry({"objectId": ticketID, "member":{"identifier":"JTrimble"},"type": { "identifier": "S" }})
+    assigned = schedule_entry.ScheduleEntry({"objectId": ticketID, "member":{"identifier":"ASPerson"},"type": { "identifier": "S" }})
     assign_ticket.create_schedule_entry(assigned)
-    assigned = schedule_entry.ScheduleEntry({"objectId": ticketID, "member":{"identifier":"JBowman"},"type": { "identifier": "S" }})
+    assigned = schedule_entry.ScheduleEntry({"objectId": ticketID, "member":{"identifier":"AASPerson"},"type": { "identifier": "S" }})
     assign_ticket.create_schedule_entry(assigned)
 
 def setToDone(ticketID):
