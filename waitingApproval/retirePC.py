@@ -26,12 +26,12 @@ http.mount("http://", adapter)
 # Config
 tokenHeader = config['cwaHeader']
 cwURL = config['cwAPI']['web']
-cwAURL = 'https://sca-atl.hostedrmm.com/cwa/api/v1/'
+cwAURL = 'https://<company>.hostedrmm.com/cwa/api/v1/'
 
 # File Information
 localuser = getpass.getuser()
 prefix = fr'C:\Users\{localuser}'
-excelFolder = r'\Southeastern Computer Associates, LLC\GCA Deployment - Documents\Database\Automate Audit Win10L Returns'
+excelFolder = r'' # enter excel file directory here
 comboBreaker = prefix + excelFolder
 my_Date = time.strftime("%Y%m%d")
 
@@ -64,7 +64,7 @@ def getcwaHEADER(Token):
 
 def getSpecificComputer(computerName, Token):
     getHeader = getcwaHEADER(Token)
-    api_request = cwAURL + '/' + 'Computers?condition=ComputerName = "GCA-{computer}"'.format(computer=computerName)
+    api_request = cwAURL + '/' + 'Computers?condition=ComputerName = "SomeSchool-{computer}"'.format(computer=computerName)
     response = http.get(url=api_request, headers=getHeader)
     rt = response.text
     try:
