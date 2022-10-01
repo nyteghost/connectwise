@@ -18,7 +18,7 @@ AUTH=config['cwAUTH']
 cwDocumentHeaders = config['cwDocumentHeaders']
 tokenHeader = config['cwaHeader']
 URL = 'https://api-na.myconnectwise.net/v2022_1/apis/3.0/'
-cwAURL = 'https://sca-atl.hostedrmm.com/cwa/api/v1/'
+cwAURL = 'https://<company>.hostedrmm.com/cwa/api/v1/'
 
 class my_dictionary(dict): 
     # __init__ function 
@@ -37,7 +37,7 @@ def index_containing_substring(the_list, substring):
 
 def ticketRequestForShipping(): ## Used for Address-ReturnCheck script to find Tickets for GCA with Scheduled as identifier
     gt = tickets_api.TicketsAPI(url=URL, auth=AUTH)
-    gt.conditions = 'company/identifier="Georgia Cyber Academy" AND summary contains "Request" AND status/name contains "Scheduled" AND team/name = "GCA Team"'
+    gt.conditions = 'company/identifier="Some School" AND summary contains "Request" AND status/name contains "Scheduled" AND team/name = "GCA Team"'
     print(gt.conditions)
     gt.pageSize = 1000
     gt.orderBy = '_info/dateEntered'
@@ -67,7 +67,7 @@ def ticketRequestForShippingDF(): ## Used for Address-ReturnCheck script to find
     columns=list(df) #Get column names
     data=[] #Empty List used for dataframe
     gt = tickets_api.TicketsAPI(url=URL, auth=AUTH)
-    gt.conditions = 'company/identifier="Georgia Cyber Academy" AND summary contains "Request" AND status/name contains "Scheduled" AND team/name = "GCA Team"'
+    gt.conditions = 'company/identifier="Some School" AND summary contains "Request" AND status/name contains "Scheduled" AND team/name = "SomeSchool Team"'
     gt.pageSize = 1000
     gt.orderBy = '_info/dateEntered'
     gt.fields = 'id'
@@ -139,7 +139,7 @@ def getTicketByID(ticketID): ## Used for Address-ReturnCheck script to find Tick
 
 def getERLTickets(): ## Used for Address-ReturnCheck script to find Tickets for GCA with Scheduled as identifier
     gt = tickets_api.TicketsAPI(url=URL, auth=AUTH)
-    gt.conditions = 'company/identifier="Georgia Cyber Academy" AND status/name contains "New" AND summary contains "Request - Return Label - Electronic"'
+    gt.conditions = 'company/identifier="Some School" AND status/name contains "New" AND summary contains "Request - Return Label - Electronic"'
     gt.pageSize = 10
     gt.orderBy = '_info/dateEntered'
     gt = gt.get_tickets()
@@ -226,9 +226,9 @@ def testForVeritick(ticketID): ## Used for Address-ReturnCheck script to find Ti
         print(STID)
     else:
         contact_email = gt.contactEmailAddress
-        if "@georgiacyber.org" in contact_email and contact_email != "gcaequipment@georgiacyber.org":
+        if "@georgiacyber.org" in contact_email and contact_email != "SomeSchoolequipment@SomeSchool.org":
             print('Contact Email:',contact_email)
-            STID = contact_email.replace('@georgiacyber.org',"")
+            STID = contact_email.replace('@SomeSchool.org',"")
             print('Staff Username:',STID)
             return STID,ticketID
     
