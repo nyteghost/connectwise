@@ -17,7 +17,7 @@ AUTH=config['cwAUTH']
 cwDocumentHeaders = config['cwDocumentHeaders']
 tokenHeader = config['cwaHeader']
 URL = 'https://api-na.myconnectwise.net/v2021_3/apis/3.0/'
-cwAURL = 'https://sca-atl.hostedrmm.com/cwa/api/v1/'
+cwAURL = 'https://<company>.hostedrmm.com/cwa/api/v1/'
 
 conn = pyodbc.connect(
 'Driver={ODBC Driver 17 for SQL Server};'
@@ -41,7 +41,7 @@ def allEmailUpdate(): ## Selects students from tbStudent
 
 def getContactInfo(CONTACT,pAI): ## Finds Information by STID ##
     ci = contacts_api.ContactsAPI(url=URL, auth=AUTH)
-    ci.conditions = 'company/identifier="Georgia Cyber Academy"'
+    ci.conditions = 'company/identifier="Some School"'
     if isinstance(CONTACT, int):
         print(CONTACT,"is int.")
         ci.conditions = 'firstName='+'"'+str(CONTACT)+'"'
