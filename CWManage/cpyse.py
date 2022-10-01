@@ -26,7 +26,7 @@ AUTH=config['cwAUTH']
 cwDocumentHeaders = config['cwDocumentHeaders']
 tokenHeader = config['cwaHeader']
 URL = 'https://api-na.myconnectwise.net/v2021_3/apis/3.0/'
-cwAURL = 'https://sca-atl.hostedrmm.com/cwa/api/v1/'
+cwAURL = 'https://<company>.hostedrmm.com/cwa/api/v1/'
 
 def createTicketNote(TICKET_ID):
     ticket_notes = ticket_notes_api.TicketNotesAPI(url=URL, auth=AUTH, ticket_id=TICKET_ID)
@@ -46,7 +46,7 @@ def getTicketNotes(TICKET_ID):
  
 def getContactInfoByEmail(email): ## Works ##
     ci = contacts_api.ContactsAPI(url=URL, auth=AUTH)
-    ci.conditions = 'company/identifier="Georgia Cyber Academy"'
+    ci.conditions = 'company/identifier="Some School"'
     # ci.conditions = 'firstName="Courtney'
     ci.childconditions= 'communicationItems/value like '+ '"'+ email + '"'
     ci = ci.get_contacts()
@@ -56,7 +56,7 @@ def getContactInfoByEmail(email): ## Works ##
 
 def editContactInfo(email,item_id,key,value):
     ci = contacts_api.ContactsAPI(url=URL, auth=AUTH)
-    ci.conditions = 'company/identifier="Georgia Cyber Academy"'
+    ci.conditions = 'company/identifier="Some School"'
     # ci.conditions = 'firstName="Courtney'
     ci.childconditions= 'communicationItems/value like '+ '"'+ email + '"'
     ci = ci.update_contact_communication(item_id,key, value)
@@ -91,7 +91,7 @@ def putContactInfo(newValue,CONTACT_ID,ITEM_ID):
 
 def getContactInfoBySTID(STID): ## Works ##
     ci = contacts_api.ContactsAPI(url=URL, auth=AUTH)
-    ci.conditions = 'company/identifier="Georgia Cyber Academy"'
+    ci.conditions = 'company/identifier="Some School"'
     ci.conditions = 'firstName='+'"'+str(STID)+'"'
     # ci.childconditions= 'communicationItems/value like '+ '"'+ STID + '"'
     ci = ci.get_contacts()
@@ -140,7 +140,7 @@ def splitTheEmail(STID): ## After getting Contact info, splits the information i
 
 def getContactInfo(CONTACT): ## Finds Information by STID ##
     ci = contacts_api.ContactsAPI(url=URL, auth=AUTH)
-    ci.conditions = 'company/identifier="Georgia Cyber Academy"'
+    ci.conditions = 'company/identifier="Some School"'
     if isinstance(CONTACT, int):
         ci.conditions = 'firstName='+'"'+str(CONTACT)+'"'
     else:
@@ -151,7 +151,7 @@ def getContactInfo(CONTACT): ## Finds Information by STID ##
 
 def getRequestTicket(): ## Used for Address-ReturnCheck script to find Tickets for GCA with Scheduled as identifier
     gt = tickets_api.TicketsAPI(url=URL, auth=AUTH)
-    gt.conditions = 'company/identifier="Georgia Cyber Academy" AND summary contains "Request" AND status/name contains "Scheduled" AND team/name = "GCA Team"'
+    gt.conditions = 'company/identifier="Some School" AND summary contains "Request" AND status/name contains "Scheduled" AND team/name = "SomeSchool Team"'
     gt.childconditions= 'location/name like Streamline'
     gt.pageSize = 1000
     gt.orderBy = 'status/name'
@@ -185,7 +185,7 @@ def getRequestTicket(): ## Used for Address-ReturnCheck script to find Tickets f
 
 def getReOpenedTickets(): ## Used for Address-ReturnCheck script to find Tickets for GCA with Scheduled as identifier
     gt = tickets_api.TicketsAPI(url=URL, auth=AUTH)
-    gt.conditions = 'company/identifier="Georgia Cyber Academy"'
+    gt.conditions = 'company/identifier="Some School"'
     gt.conditions = 'status/name = "Re-Opened"'
     gt.conditions = 'summary contains "Request -"'
     gt.conditions = 'summary not contains "Verification"'
@@ -311,7 +311,7 @@ def getTimeSheetEntry():
 
 def getGCAFBARTickets(): ## Used for Address-ReturnCheck script to find Tickets for GCA with Scheduled as identifier
     gt = tickets_api.TicketsAPI(url=URL, auth=AUTH)
-    gt.conditions = 'company/identifier="Georgia Cyber Academy" AND summary = "GCA: Computers I - Backup Status Report" AND Id=301224'
+    gt.conditions = 'company/identifier="Some School" AND summary = "SomeSchool: Computers I - Backup Status Report" AND Id=301224'
     gt.childconditions= 'location/name like Streamline'
     gt.pageSize = 1000
     gt.orderBy = 'status/name'
