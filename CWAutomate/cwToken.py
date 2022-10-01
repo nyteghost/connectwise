@@ -13,7 +13,7 @@ config=tangerine()
 ### Config
 tokenHeader = config['cwaHeader']
 cwURL = 'https://api-na.myconnectwise.net/v2021_3/apis/3.0/'
-cwAURL = 'https://sca-atl.hostedrmm.com/cwa/api/v1/'
+cwAURL = 'https://<company>.hostedrmm.com/cwa/api/v1/'
 
 
 def getToken():
